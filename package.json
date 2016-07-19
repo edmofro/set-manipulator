@@ -1,6 +1,6 @@
 {
   "name": "set-manipulator",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Fast set operations for javascript arrays",
   "repository": "https://github.com/edmofro/set-manipulator.git",
   "author": "Edwin Monk-Fromont <edmofro@gmail.com>",
