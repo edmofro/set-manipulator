@@ -5,8 +5,10 @@
   "repository": "https://github.com/edmofro/set-manipulator.git",
   "author": "Edwin Monk-Fromont <edmofro@gmail.com>",
   "license": "MIT",
-  "main": "index",
+  "main": "lib/index.js",
   "scripts": {
+    "compile": "babel -d lib/ src/",
+    "prepublish": "npm run compile",
     "test": "jest"
   },
   "jest": {
@@ -28,5 +30,8 @@
     "eslint-plugin-jsx-a11y": "^1.5.5",
     "eslint-plugin-react": "^5.2.2",
     "jest-cli": "^13.2.3"
+  },
+  "peerDependencies": {
+    "babel-polyfill": "^6.9.1"
   }
 }
