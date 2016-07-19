@@ -1,60 +1,50 @@
-setOps.js
+set-manipulator
 =========
-Set operations in `setOps.js` take two arrays and return the result of the operation as an array. Supported operations are `union`, `intersection`, `difference`, `complement`, and `equals`. `difference` is the _symmetric difference_ and `complement` is the _relative complement_. The set operations are fast, even for large arrays.
+ES6 set manipulation operations based on https://gist.github.com/jabney/d9d5c13ad7f871ddf03f
+
+Set operations take two arrays and return the result of the operation as an array. Supported operations are `union`, `intersection`, `difference`, `complement`, and `equals`. `difference` is the _symmetric difference_ and `complement` is the _relative complement_. The set operations are fast, even for large arrays.
 
 ## Usage
 
+```npm install set-manipulator```
+
 ```javascript
-var so = setOps,
-a = [1, 1, 2, 3, 3], // [1, 2, 3]
-b = [3, 4, 4, 5, 5]; // [3, 4, 5]
+import {
+  union,
+  intersection,
+  difference,
+  complement,
+  equals,
+} from 'set-manipulator';
+const a = [1, 1, 2, 3, 3]; // [1, 2, 3]
+const b = [3, 4, 4, 5, 5]; // [3, 4, 5]
 
 // Join two sets together. A ∪ B
-so.union(a, b); // => [1, 2, 3, 4, 5]
+union(a, b); // => [1, 2, 3, 4, 5]
 
 // The intersection of two sets. A ∩ B
-so.intersection(a, b); // => [3]
+intersection(a, b); // => [3]
 
 // The symmetric difference of two sets. A Δ B
-so.difference(a, b); // => [1, 2, 4, 5]
+difference(a, b); // => [1, 2, 4, 5]
 
 // The relative complement, or a minus b. A\B
-so.complement(a, b); // => [1]
+complement(a, b); // => [1]
 
 // Set equality. A = B
-so.equals(a, b); // => false
-so.equals(a, [1, 2, 3]); // => true
+equals(a, b); // => false
+equals(a, [1, 2, 3]); // => true
 ```
 
 ## Using Objects
 
-Arrays of objects can be used in set operations as long as they have some type of unique identifier. If objects have a `toString` method which returns the unique identifier, they can be used as is. If not, a custom uid method can be specified. The methods `pushUid` and `popUid` work together to set and remove a context for returning an object's identifier.
+Arrays of objects can be used in set operations as long as they have some type of unique identifier. A custom identity extractor method can be specified as a third argument to any of the set manipulation functions.
 
 ```javascript
-var so = setOps,
-a = [{id:1}, {id:2}],
-b = [{id:2}, {id:3}],
+import { union } from 'set-manipulator';
+const a = [{ id: a, number: 1 }, { id: b, number: 2 }];
+const b = [{ id: c, number: 5}];
 
-// Push a method to retrieve object ids onto the uid stack.
-uidMethod = so.pushUid(function() {
-  return this.id;
-});
-
-// Peform set operations.
-
-so.union(a, b); // => [{id:1}, {id:2}, {id:3}]
-
-so.intersection(a, b); // => [{id:2}]
-
-so.difference(a, b); // => [{id:1}, {id:3}]
-
-so.complement(a, b); // => [{id:1}]
-
-so.equals(a, b); // => false
-so.equals(a, [{id:1}, {id:2}]); // => true
-
-// Now that we're done, restore the previous uid method
-// (by default an identity method).
-
-uidMethod = so.popUid();
+// Join two sets together. A ∪ B
+union(a, b, (object) => object.id); // => [{ id: a, number: 1 }, { id: b, number: 2 }, { id: c, number: 5 }];
 ```
