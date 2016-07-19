@@ -4,9 +4,11 @@ ES6 set manipulation operations based on https://gist.github.com/jabney/d9d5c13a
 
 Set operations take two arrays and return the result of the operation as an array. Supported operations are `union`, `intersection`, `difference`, `complement`, and `equals`. `difference` is the _symmetric difference_ and `complement` is the _relative complement_. The set operations are fast, even for large arrays.
 
-## Usage
+## Installation
 
 ```npm install set-manipulator```
+
+## Usage
 
 ```javascript
 import {
