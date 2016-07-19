@@ -37,7 +37,7 @@ export default class SetManipulator {
     // If identity extractor passed in, push it on the stack
     if (identityExtractor) this.pushIdentityExtractor(identityExtractor);
     // Create a histogram of 'a'.
-    const hist = Object.create(null);
+    const hist = {};
     const out = [];
     let ukey;
     a.forEach((value) => {
@@ -57,7 +57,8 @@ export default class SetManipulator {
     if (identityExtractor) this.popIdentityExtractor(identityExtractor);
     // Call the given evaluator.
     if (evaluator) {
-      for (const [key] of Object.entries(hist)) {
+      for (const key in hist) {
+        if (!hist.hasOwnProperty(key)) continue; // Property from object prototype, skip
         if (evaluator(hist[key].freq)) out.push(hist[key].value);
       }
       return out;
@@ -98,7 +99,8 @@ export default class SetManipulator {
     let max = 0;
     let min = Math.pow(2, 53);
     const hist = this.process(a, b, identityExtractor);
-    for (const [key] of hist) {
+    for (const key in hist) {
+      if (!hist.hasOwnProperty(key)) continue; // Property from object prototype, skip
       max = Math.max(max, hist[key].freq);
       min = Math.min(min, hist[key].freq);
     }

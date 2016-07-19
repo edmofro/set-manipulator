@@ -13,9 +13,8 @@
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
-    "testPathIgnorePatterns": [
-      "/node_modules/"
-    ]
+    "preprocessorIgnorePatterns": ["<rootDir>/node_modules/"],
+    "testPathIgnorePatterns": ["/node_modules/", "lib"]
   },
   "devDependencies": {
     "babel-core": "^6.10.4",
@@ -30,8 +29,5 @@
     "eslint-plugin-jsx-a11y": "^1.5.5",
     "eslint-plugin-react": "^5.2.2",
     "jest-cli": "^13.2.3"
-  },
-  "peerDependencies": {
-    "babel-polyfill": "^6.9.1"
   }
 }
