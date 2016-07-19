@@ -33,7 +33,9 @@ export default class SetManipulator {
   // This function is used generically by the below set operation
   // methods, a.k.a, 'evaluators', to return some subset of
   // a set union, based on frequencies in the histogram.
-  process(a, b, evaluator) {
+  process(a, b, evaluator, identityExtractor) {
+    // If identity extractor passed in, push it on the stack
+    if (identityExtractor) this.pushIdentityExtractor(identityExtractor);
     // Create a histogram of 'a'.
     const hist = Object.create(null);
     const out = [];
@@ -51,6 +53,8 @@ export default class SetManipulator {
         if (hist[ukey].freq === 1) hist[ukey].freq = 3;
       } else hist[ukey] = { value: value, freq: 2 };
     });
+    // Pop any new identity extractor
+    if (identityExtractor) this.popIdentityExtractor(identityExtractor);
     // Call the given evaluator.
     if (evaluator) {
       for (const [key] of Object.entries(hist)) {
@@ -63,37 +67,37 @@ export default class SetManipulator {
 
   // Join two sets together.
   // Set.union([1, 2, 2], [2, 3]) => [1, 2, 3]
-  union(a, b) {
-    return this.process(a, b, () => true);
+  union(a, b, identityExtractor) {
+    return this.process(a, b, () => true, identityExtractor);
   }
 
   // Return items common to both sets.
   // Set.intersection([1, 1, 2], [2, 2, 3]) => [2]
-  intersection(a, b) {
-    return this.process(a, b, (freq) => freq === 3);
+  intersection(a, b, identityExtractor) {
+    return this.process(a, b, (freq) => freq === 3, identityExtractor);
   }
 
   // Symmetric difference. Items from either set that
   // are not in both sets.
   // Set.difference([1, 1, 2], [2, 3, 3]) => [1, 3]
-  difference(a, b) {
-    return this.process(a, b, (freq) => freq < 3);
+  difference(a, b, identityExtractor) {
+    return this.process(a, b, (freq) => freq < 3, identityExtractor);
   }
 
   // Relative complement. Items from 'a' which are
   // not also in 'b'.
   // Set.complement([1, 2, 2], [2, 2, 3]) => [3]
-  complement(a, b) {
-    return this.process(a, b, (freq) => freq === 1);
+  complement(a, b, identityExtractor) {
+    return this.process(a, b, (freq) => freq === 1, identityExtractor);
   }
 
   // Returns true if both sets are equivalent, false otherwise.
   // Set.equals([1, 1, 2], [1, 2, 2]) => true
   // Set.equals([1, 1, 2], [1, 2, 3]) => false
-  equals(a, b) {
+  equals(a, b, identityExtractor) {
     let max = 0;
     let min = Math.pow(2, 53);
-    const hist = this.process(a, b);
+    const hist = this.process(a, b, identityExtractor);
     for (const [key] of hist) {
       max = Math.max(max, hist[key].freq);
       min = Math.min(min, hist[key].freq);

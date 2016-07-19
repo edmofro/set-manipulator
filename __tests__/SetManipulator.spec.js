@@ -26,6 +26,14 @@ describe('SetManipulator', () => {
     expect(manipulator.complement(b, a)).toEqual(['e', 'd']);
   });
 
+  it('correctly produces the complement with a custom identity extractor', () => {
+    const manipulator = new SetManipulator();
+    const a = [{ id: 'a' }, { id: 'b' }, { id: 'c' }];
+    const b = [{ id: 'b' }, { id: 'e' }, { id: 'c' }, { id: 'd' }];
+    expect(manipulator.complement(a, b, (object) => object.id)).toEqual([{ id: 'a' }]);
+    expect(manipulator.complement(b, a, (object) => object.id)).toEqual([{ id: 'e' }, { id: 'd' }]);
+  });
+
   it('correctly produces the union of two different arrays', () => {
     const manipulator = new SetManipulator();
     const a = ['a', 'b', 'c'];
