@@ -31,7 +31,7 @@ intersection(a, b); // => [3]
 difference(a, b); // => [1, 2, 4, 5]
 
 // The relative complement, or a minus b. A\B
-complement(a, b); // => [1]
+complement(a, b); // => [1, 2]
 
 // Set equality. A = B
 equals(a, b); // => false
